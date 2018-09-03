@@ -5,37 +5,23 @@
 html,body{
  height:100%;
  box-sizing: border-box;
- box-sizing: border-box;
-  font-family:sans-serif;
  font-family:sans-serif;
+ cursor: default;
 }
 .flex-center{
  justify-content: center;
  align-items: center;
- justify-content: center;
- align-items: center;
 }
+
 .wrapper{
  display:flex;
- display:flex;
-  width:100%;
- height:100%;
- background: #f0f;
+
  width:100%;
  height:100%;
  background: #f0f;
 }
+
 .field{
- display:block;
- position:relative;
- width: 40%;
- background: #e45b5e;
-}
-.field::before{
- content:"";
- display:block;
- padding-top: 100%;
- opacity:1;
  display:block;
  position:relative;
  width: 40%;
@@ -47,24 +33,22 @@ html,body{
    opacity:1;
  }
 }
+
+
 .board{
  display: flex;
  flex-direction:column;
- display: flex;
- flex-direction:column;
-  position:absolute;
+
  position:absolute;
-  top:0;
- left:0;
- right:0;
- bottom:0;
+
  top:0;
  left:0;
  right:0;
  bottom:0;
-  background: #152196;
+
  background: #152196;
 }
+
 .playfield{
  display: flex;
 
@@ -76,12 +60,7 @@ html,body{
 
 .maze{
  display: flex;
-  height: 75%;
- width: 75%;
- background: #69e851;
- position: absolute;
- top:0;
- left:0;
+
  height: 75%;
  width: 75%;
  background: #69e851;
@@ -90,10 +69,18 @@ html,body{
  left:0;
  white-space: pre-wrap;
  font-family: monospace;
+ font-size: .75vw;
+ &::selection{
+   background: transparent;
+ }
+ &::-moz-selection{
+   background: transparent;
+ }
 }
 .controlpanel{
  display: flex;
  flex-direction: column;
+
  width: 25%;
  height: 25%;
  position: absolute;
@@ -102,6 +89,7 @@ html,body{
 
  background: #aab402;
 }
+
 .controlrow{
  display:flex;
  width:100%;
@@ -109,6 +97,20 @@ html,body{
 }
 .controls{
  margin: auto;
+ display: flex;
+ padding: 5px;
+ margin: 5px;
+ position:relative;
+ top:0;
+ border-radius: 10px;
+ background: #de5893;
+ box-shadow: 0 10px #bc3671;
+ &:active{
+   box-shadow: 0 0px #bc3671;
+   top: 10px;
+ }
+}
+.arrow{
  width:0;
  height:0;
 }
@@ -148,42 +150,37 @@ html,body{
    border-top: 35px solid red;
  }
 }
+
+
 .gamesetup{
  display:flex;
  flex-direction: column;
  position:relative;
  z-index: 1;
- display:flex;
- flex-direction: column;
- position:relative;
- z-index: 1;
-  height:100%;
- width: 100%;
- background: #75956a;
+
  height:100%;
  width: 100%;
  background: #75956a;
- opacity: 0;
  // opacity: 0;
 }
 .setupfieldcontainer{
  display:flex;
  flex-direction: column;
- flex-direction: column;
  justify-content: center;
  align-items: center;
  width:60%;
-  text-align: center;
+
  text-align: center;
+
  background:#3c3a54;
  color: #fff;
- color: #fff;
  height: 55px;
-  margin: 10px 0;
+
  margin: 10px 0;
  border-radius: 10px;
 }
- .setupfield{
+
+.setupfield{
  width: 100%;
  height:100%;
 
@@ -194,26 +191,27 @@ html,body{
 
  text-align:center;
  font-size: 1.448em;
-
+ cursor:text;
  color:#aa1abd;
  background: #503be4;
 }
+
 .start{
  display:flex;
- display:flex;
+
  position: relative;
  top: 0;
-  padding: 10px 0;
+
  padding: 10px 0;
-  height: 20px;
- width: 155px;
- background: #0f0;
+
  height: 20px;
  width: 155px;
  background: #0f0;
+
  border-radius: 5px;
-  box-shadow: 0 10px #0a0;
+
  box-shadow: 0 10px #0a0;
+
  &:active{
    box-shadow: 0 0 #0a0;
    top: 10px;

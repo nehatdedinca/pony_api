@@ -1,0 +1,12 @@
+.field{
+	display:block;
+	position:relative;
+	width: 80%;
+	background: #e45b5e;
+	&::before{
+		content:"";
+		display:block;
+		padding-top: 100%;
+		opacity:1;
+	}
+}
