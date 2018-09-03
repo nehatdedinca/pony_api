@@ -1,12 +1,15 @@
 *{
  margin:0;
  padding:0;
+ box-sizing: border-box;
 }
 html,body{
  height:100%;
- box-sizing: border-box;
+
  font-family:sans-serif;
  cursor: default;
+
+ background: linear-gradient(#fef, #ede);
 }
 .flex-center{
  justify-content: center;
@@ -16,16 +19,26 @@ html,body{
 .wrapper{
  display:flex;
 
- width:100%;
+  @media(min-width:1526px){
+  	width:1525px;
+  	margin: auto;
+  }
+  @media(max-width:1525px){
+  	width: 100%;
+  }
+
  height:100%;
- background: #f0f;
 }
 
 .field{
- display:block;
+ display:inline-block;
  position:relative;
- width: 40%;
- background: #e45b5e;
+ @media(min-width:821px){
+		width:820px;
+	}
+	@media(max-width:820px){
+		width: 100%;
+	}
  &::before{
    content:"";
    display:block;
@@ -33,7 +46,6 @@ html,body{
    opacity:1;
  }
 }
-
 
 .board{
  display: flex;
@@ -46,7 +58,10 @@ html,body{
  right:0;
  bottom:0;
 
- background: #152196;
+  box-sizing: content-box;
+	border: 5px solid #b09995;
+	border-radius: 15px;
+	overflow:hidden;
 }
 
 .playfield{
@@ -59,17 +74,20 @@ html,body{
 }
 
 .maze{
- display: flex;
+  display: inline-block;
+	overflow: scroll;
 
- height: 75%;
- width: 75%;
+  min-width:75%;
+	max-width: 100%;
  background: #69e851;
  position: absolute;
  top:0;
  left:0;
  white-space: pre-wrap;
  font-family: monospace;
- font-size: .75vw;
+ @media(max-width:686px){
+		font-size: 1.8vw;
+	}
  &::selection{
    background: transparent;
  }
@@ -77,6 +95,19 @@ html,body{
    background: transparent;
  }
 }
+
+.msg_box{
+	background: #ac8091;
+	width: 73%;
+	height: 23%;
+ 	overflow-y: scroll;
+ 	position: absolute;
+	bottom: 0;
+	left: 0;
+ 	border: 5px solid #10308b;
+ 	margin: 1%;
+}
+
 .controlpanel{
  display: flex;
  flex-direction: column;
@@ -100,6 +131,8 @@ html,body{
  display: flex;
  padding: 5px;
  margin: 5px;
+ width: 35%;
+ height: 50%;
  position:relative;
  top:0;
  border-radius: 10px;
@@ -110,6 +143,14 @@ html,body{
    top: 10px;
  }
 }
+
+.circle{
+	width:100%;
+	height:100%;
+	border-radius:50%;
+ 	background: black;
+}
+
 .arrow{
  width:0;
  height:0;
@@ -176,7 +217,7 @@ html,body{
  color: #fff;
  height: 55px;
 
- margin: 10px 0;
+ margin: 1px 0;
  border-radius: 10px;
 }
 
@@ -202,12 +243,10 @@ html,body{
  position: relative;
  top: 0;
 
- padding: 10px 0;
-
- height: 20px;
- width: 155px;
+ height: 10%;
+ width: 60%;
  background: #0f0;
-
+ margin: 1% 0;
  border-radius: 5px;
 
  box-shadow: 0 10px #0a0;

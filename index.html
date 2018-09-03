@@ -1,69 +1,70 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
   <title>Pony Challenge</title>
-  <link rel="stylesheet" href="./master.css">
   <link rel="stylesheet" href="css/master.css">
-  <link rel="stylesheet" media="(max-width:600px)" href="css/max-600px.css">
 </head>
 <body>
-    <div class="wrapper flex-center">
-     <div class="field">
-       <div class="board">
-        <div class="playfield flex-center">
-          <div class="maze flex-center"></div>
-          <div class="msg_box">
-
-           </div>
-          <div class="controlpanel flex-center">
-            <div class="controlrow flex-center">
-               <div class="controls flex-center">
-                 <div class="arrow up"></div>
-               </div>
-             </div>
-             <div class="controlrow flex-center">
-               <div class="controls flex-center">
-                 <div class="arrow left"></div>
-               </div>
-               <div class="controls flex-center">
-                 <div class="arrow right"></div>
-               </div>
-             </div>
-             <div class="controlrow flex-center">
-               <div class="controls flex-center">
-                 <div class="arrow down"></div>
-               </div>
-             </div>
-           </div>
-           <div class="gamesetup flex-center">
-             <div class="setupfieldcontainer">
-               MAZE WIDTH:
-               <input type="number" class='setupfield' min='15' max='25' value="15" id='maze-width'>
-             </div>
-             <div class="setupfieldcontainer">
-               MAZE HEIGHT:
-               <input type="number" class='setupfield' min='15' max='25' value="15" id='maze-height'>
-             </div>
-             <div class="setupfieldcontainer">
-               MAZE DIFFICULTY:
-               <input type="number" class='setupfield' min='1' max='10' value="1" id='maze-difficulty'>
-             </div>
-             <div class="setupfieldcontainer">
-               PLAYER NAME (PONIES ONLY)
-               <input type="text" class='setupfield' value="Fluttershy" id='maze-player-name'>
-             </div>
-             <div class="start flex-center">
-               START
-             </div>
-           </div>
+  <div class="wrapper flex-center">
+   <div class="field">
+     <div class="board flex-center">
+       <div class="playfield flex-center">
+         <div class="maze flex-center"></div>
+         <div class="msg_box">
+            <ul id="messages">
+           </ul>
          </div>
-       </div>
-     </div>
-   </div>
+         <div class="controlpanel flex-center">
+           <div class="controlrow flex-center">
+             <div class="controls flex-center" data-dir='north'>
+               <div class="arrow up"></div>
+             </div>
+           </div>
+           <div class="controlrow flex-center">
+             <div class="controls flex-center" data-dir='west'>
+               <div class="arrow left"></div>
+             </div>
+             <div class="controls flex-center" data-dir='stay'>
+               <div class="circle"></div>
+             </div>
+             <div class="controls flex-center" data-dir='east'>
+               <div class="arrow right"></div>
+             </div>
+           </div>
+           <div class="controlrow flex-center">
+             <div class="controls flex-center" data-dir='south'>
+               <div class="arrow down"></div>
+             </div>
+           </div>
+          </div>
+          <div class="gamesetup flex-center">
+            <div class="setupfieldcontainer">
+              MAZE WIDTH:
+              <input type="number" class='setupfield' min='15' max='25' value="15" id='maze-width'>
+            </div>
+            <div class="setupfieldcontainer">
+              MAZE HEIGHT:
+              <input type="number" class='setupfield' min='15' max='25' value="15" id='maze-height'>
+            </div>
+            <div class="setupfieldcontainer">
+              MAZE DIFFICULTY:
+              <input type="number" class='setupfield' min='1' max='10' value="1" id='maze-difficulty'>
+            </div>
+            <div class="setupfieldcontainer">
+              PLAYER NAME (PONIES ONLY)
+              <input type="text" class='setupfield' value="Fluttershy" id='maze-player-name'>
+            </div>
+            <div class="start flex-center">
+              START
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-   <script src="./script.js" charset="utf-8"></script>
- </body>
- </html>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="./script.js" charset="utf-8"></script>
+</body>
+</html>
