@@ -52,7 +52,7 @@ html,body{
 		background-repeat: no-repeat;
 		background-size: contain;
 		background-position: left;
-		opacity: .065;
+		opacity: .025;
 	}
 }
 
@@ -217,6 +217,34 @@ html,body{
 	background: $bg_color;
 
 	// opacity: 0;
+
+	h1{
+		position:absolute;
+		top: 5%;
+		padding-bottom: .02em;
+
+		font-size: 8em;
+		text-align: center;
+
+		color: $text_color;
+		border-bottom: 5px solid $text_color;
+		text-shadow: 	1px 1px darken($text_color, 10%),
+									2px 2px darken($text_color, 10%),
+									3px 3px darken($text_color, 10%),
+									4px 4px darken($text_color, 10%),
+									5px 5px darken($text_color, 10%);
+
+		@media(max-width:850px){
+			font-size: 6em;
+		}
+		@media(max-width: 635px){
+			font-size: 2em;
+		}
+		@media(max-width:420px){
+			visibility: hidden;
+		}
+
+	}
 }
 
 .setupfieldcontainer{
@@ -263,6 +291,20 @@ html,body{
 
 	border-left: 2px solid darken($bg_color, 15%);
 	border-right: 2px solid darken($bg_color, 15%);
+
+	&[type='text']{
+		&::selection{
+			background: $text_color;
+			color: $bg_color;
+		}
+		&::-moz-selection{
+			background: $text_color;
+			color: $bg_color;
+		}
+		&::placeholder{
+			color: $text_color;
+		}
+	}
 }
 
 .start{

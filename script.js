@@ -89,6 +89,10 @@ function printMazeState(mazeViz){
 function ajaxFail(err){
   console.log("== ERROR ==");
   console.log(err);
+
+  if(err.responseText == "Only ponies can play"){
+    $("#maze-player-name").val('').attr('placeholder', err.responseText);
+  }
 }
  function scrollBottom(){
   let scrollbox = $('.msg_box');
@@ -99,7 +103,7 @@ function ajaxFail(err){
 //         EVENT HANDLING        //
 ///////////////////////////////////
 
-$(document).on('click', '.start', function(){
+$(document).on('mousedown', '.start', function(){
   // collect game setup and get maze_id from api when user starts
   mazeWidth = $('#maze-width').val();
   mazeHeight = $('#maze-height').val();
