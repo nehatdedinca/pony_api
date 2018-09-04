@@ -17,13 +17,22 @@ var mazeWidth, mazeHeight, difficulty, pony;
 var mazeId = "";
 var mazeState = {};
 // maze visuals (ascii art!!)
-var mazeViz = "";
+var mazeViz;
 // current game state
-var gameState = "";
+var gameState;
 // empty object for maze parameters
 var mazeParams = {};
+// keeps track of visited cells (tremaux)
+// each pair consists of array index as key,
+// and an object with the key "visited" which value is 0,1 or 2
+// 0 is not visited, 1 is visited once, 2 is dead-end
+var mazeVisits = {};
+// random mouse algo
+var mouseDir;
+// pony position, from array
+var ponyPos;
 // "ai" controlled pony
-var AUTO = false;
+var AUTO = true;
 
 //////////////////////////////
 //        FUNCTIONS         //
@@ -56,18 +65,30 @@ function getMazeState(id){
     url: apiURL+"/"+id,
     method: "GET"
   }).done(function(data){
+    if(!gameState){
+      // only init mazeVisits with 0's on first call
+      mazeVisits = initTremaux(data.data, mazeVisits);
+    }
+
     mazeState = data;
     gameState = data['game-state'].state.toLowerCase();
-
-    console.log(gameState);
+    ponyPos = data.pony[0];
+    // prints out the maze visuals (ASCII, thanks API!!)
     getMazeVisual(id)
+
+    // sets cell at current position as traveled
+    mazeVisits = mazeCellVisited(mazeVisits, ponyPos);
 
     if(AUTO && gameState == "active"){
       let walls = buildWallsAtPony(data);
       let dirs = getValidDirections(walls);
-      let randDir = getRandomInt(dirs.length);
 
-      postMazeMove(mazeId, dirs[randDir]);
+      if(!mouseDir){
+        mouseDir = 0;
+      }
+
+      mouseDir = makeDirection(walls, dirs, mouseDir);
+      postMazeMove(mazeId, dirs[mouseDir]);
     }
   }).fail(ajaxFail);
 }
@@ -90,7 +111,6 @@ function postMazeMove(id, dir){
     method: "POST",
     data: JSON.stringify({direction: dir})
   }).done(function(data){
-    console.log(data);
     gameState = data.state;
     getMazeState(id);
     printMsg(data["state-result"])
@@ -126,43 +146,92 @@ function scrollBottom(){
 function buildWallsAtPony(mazestate){
   // each position can have walls at "west" and "north"
   // find walls by looking at nth index in maze data array
-  let ponyPos = mazestate.pony[0];
+  // returns array with walls relative to pony position
 
   let wallsPony = mazestate.data[ponyPos];
   let wallsRight = mazestate.data[ponyPos+1];
   let wallsBelow = ponyPos+mazeWidth < (mazeWidth*mazeHeight) ? mazestate.data[ponyPos+mazeWidth] : ["north"];
 
-  let walls = {
+  let walls = new Array();
+
+  let wallsData = {
     pony: wallsPony,
     right: wallsRight,
     below: wallsBelow
   };
 
+  for(wall in wallsData){
+    for(var dir = 0; dir < wallsData[wall].length; dir++){
+      if(wall === "pony"){
+        walls.push(wallsData[wall][dir]);
+      }
+      if(wall === "below" && wallsData[wall][dir] == "north"){
+        walls.push("south");
+      }
+      if(wall === "right" && wallsData[wall][dir] == "west"){
+        walls.push("east");
+      }
+    }
+  }
   return walls;
 }
 
 function getValidDirections(walls){
   let dirs = ["north", "west", "east", "south"];
-  for(x in walls){
-    for(var i = 0; i < walls[x].length; i++){
-      let index;
-      // remove directions depending on key name
-      // pretty clunky implementation
-      if(x === 'pony'){
-        index = dirs.indexOf(walls[x][i]);
-      }
-      if(x === 'below' && walls[x][i] === "north"){
-        index = dirs.indexOf("south");
-      }
-      if(x === 'right' && walls[x][i] === "west"){
-        index = dirs.indexOf("east");
-      }
-      if(index >= 0){
-        dirs.splice(index, 1);
-      }
-    }
-  }
+
+  // for(var wall = 0; wall < walls.length; wall++){
+  //   let index = dirs.indexOf(walls[wall]);
+  //   dirs.splice(index, 1);
+  // }
   return dirs;
+}
+
+function makeDirection(walls, dirs, mousedir){
+
+  if(walls.includes(dirs[mousedir])){
+    let newdir = dirs.filter(function(x){
+      return walls.indexOf(x) < 0;
+    });
+    mousedir = dirs.indexOf(newdir[getRandomInt(newdir.length)]);
+  }
+
+  return mousedir;
+}
+
+function initTremaux(maze, mazeVisits){
+  for(var i = 0; i < maze.length; i++){
+    mazeVisits[i] = {
+      visited: 0
+    };
+  };
+  return mazeVisits;
+};
+
+function tremauxRemoval(dirs){
+  // tremaux dir removal
+  let index = new Array();
+  let newWidth = mazeWidth;
+
+  if((mazeWidth+ponyPos) > (mazeWidth * mazeHeight)-1 ||
+     (mazeWidth+ponyPos) < 0){
+       newWidth = 0;
+  }
+
+  for(var i=0; i < dirs.length; i++){
+
+  }
+
+  return dirs;
+}
+
+function mazeCellVisited(mazeVisits, ponyPos){
+  // add 1 to maze cell visited state
+
+  if(mazeVisits[ponyPos].visited < 2){
+    mazeVisits[ponyPos].visited += 1;
+  }
+
+  return mazeVisits;
 }
 
 function getRandomInt(max){
