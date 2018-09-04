@@ -1,0 +1,246 @@
+::selection {
+  background: transparent; }
+
+::-moz-selection {
+  background: transparent; }
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  font-family: sans-serif;
+  cursor: default;
+  background: #ffbd39;
+  font-size: 1em; }
+
+.flex-center {
+  justify-content: center;
+  align-items: center; }
+
+.wrapper {
+  display: flex;
+  height: 100%; }
+  @media (min-width: 1526px) {
+    .wrapper {
+      width: 1525px;
+      margin: auto; } }
+  @media (max-width: 1525px) {
+    .wrapper {
+      width: 100%; } }
+  .wrapper::after {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    background: url(http://www.mylifeasafoodie.com/wp-content/uploads/2017/08/guy.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: left;
+    opacity: .025; }
+
+.field {
+  display: inline-block;
+  position: relative;
+  z-index: 1; }
+  @media (min-width: 841px) {
+    .field {
+      width: 840px; } }
+  @media (max-width: 840px) {
+    .field {
+      width: 100%; } }
+  .field::before {
+    content: "";
+    display: block;
+    padding-top: 100%;
+    opacity: 1; }
+
+.board {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-sizing: content-box;
+  border-radius: 15px;
+  overflow: hidden;
+  border: 2px solid #ec9d00;
+  box-shadow: 5px 5px #ec9d00, 10px 10px #ec9d00, 15px 15px #ec9d00; }
+
+.playfield {
+  display: flex;
+  width: 100%;
+  height: 100%; }
+
+.maze {
+  display: flex;
+  height: 75%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  background: #ffbd39;
+  color: #e61c5d;
+  white-space: pre-wrap;
+  font-family: monospace;
+  font-weight: bold;
+  border-bottom: 2px solid #ec9d00; }
+  @media (min-width: 687px) {
+    .maze {
+      font-size: 0.8em; } }
+  @media (max-width: 686px) {
+    .maze {
+      font-size: 1.8vw; } }
+
+.msg_box {
+  width: 75%;
+  height: 25%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  overflow-y: scroll;
+  background: #ffbd39;
+  color: #e61c5d; }
+
+#messages li {
+  padding: 5px; }
+  #messages li:nth-child(even) {
+    background: #e61c5d;
+    color: #ffbd39; }
+
+.controlpanel {
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+  height: 25%;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: #ffbd39; }
+
+.controlrow {
+  display: flex;
+  width: 100%;
+  height: 33%;
+  margin: 5px 0;
+  position: relative;
+  top: 5px; }
+
+.controls {
+  display: flex;
+  flex-grow: 1;
+  margin: 5px;
+  width: 35%;
+  height: 100%;
+  color: #ffbd39;
+  position: relative;
+  bottom: 10px;
+  font-weight: bold;
+  border-radius: 10px;
+  background: #e61c5d;
+  box-shadow: 0 10px #a31241; }
+  .controls:active {
+    box-shadow: 0 0px #a31241;
+    bottom: 0px; }
+
+.no-show {
+  visibility: hidden; }
+
+.gamesetup {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  width: 100%;
+  background: #ffbd39; }
+  .gamesetup h1 {
+    position: absolute;
+    top: 5%;
+    padding-bottom: .02em;
+    font-size: 8em;
+    text-align: center;
+    color: #e61c5d;
+    border-bottom: 5px solid #e61c5d;
+    text-shadow: 1px 1px #ba154a, 2px 2px #ba154a, 3px 3px #ba154a, 4px 4px #ba154a, 5px 5px #ba154a; }
+    @media (max-width: 850px) {
+      .gamesetup h1 {
+        font-size: 6em; } }
+    @media (max-width: 635px) {
+      .gamesetup h1 {
+        font-size: 2em; } }
+    @media (max-width: 420px) {
+      .gamesetup h1 {
+        visibility: hidden; } }
+
+.setupfieldcontainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 60%;
+  text-align: center;
+  background: #e61c5d;
+  color: #ffbd39;
+  height: 55px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin: 1% 0;
+  border-radius: 10px 10px 11px 11px;
+  box-shadow: 0 10px #ec9d00; }
+  @media (max-width: 360px) {
+    .setupfieldcontainer {
+      padding-top: .5em; } }
+
+.setupfield {
+  width: 100%;
+  height: 100%;
+  /* flex-grow: 1; */
+  -moz-appearance: textfield;
+  border-style: none;
+  border-radius: 0 0 10px 10px;
+  text-align: center;
+  font-size: 1.448em;
+  font-weight: bold;
+  cursor: text;
+  color: #e61c5d;
+  background: #ffbd39;
+  border-left: 2px solid #ec9d00;
+  border-right: 2px solid #ec9d00; }
+  .setupfield::selection {
+    background: #e61c5d;
+    color: #ffbd39; }
+  .setupfield::-moz-selection {
+    background: #e61c5d;
+    color: #ffbd39; }
+  .setupfield[type='text']::placeholder {
+    color: #e61c5d; }
+
+.start {
+  display: flex;
+  position: relative;
+  top: 0;
+  height: 10%;
+  width: 60%;
+  margin: 1% 0;
+  color: #ffbd39;
+  font-size: 4em;
+  font-weight: bold;
+  background: #e61c5d;
+  border-radius: 5px;
+  box-shadow: 0 10px #a31241;
+  transition: 16ms ease-in; }
+  .start:active {
+    box-shadow: 0 0 #a31241;
+    top: 10px; }
+  @media (max-width: 510px) {
+    .start {
+      font-size: 2em; } }
+
+/*# sourceMappingURL=master.css.map */
