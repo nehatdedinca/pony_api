@@ -61,8 +61,7 @@ function getMazeId(params){
 
 
 function getMazeState(id){
-  // retrieves state from server, then renders visuals
-  // NB - state is currently not utilized for any purpose
+  // retrieves & stores state from server, main loop
   gameStarted = true;
   $.ajax({
     dataType: "json",
@@ -73,7 +72,6 @@ function getMazeState(id){
       // only init mazeVisits with 0's on first call
       mazeVisits = initTremaux(data.data, mazeVisits);
     }
-
     mazeState = data;
     gameState = data['game-state'].state.toLowerCase();
     ponyPos = data.pony[0];
@@ -84,14 +82,17 @@ function getMazeState(id){
     mazeVisits = mazeCellVisited(mazeVisits, ponyPos);
 
     if(AUTO && gameState == "active"){
-      let walls = buildWallsAtPony(data);
+      // main AI loop
+      mouseDir = !mouseDir ? 0 : mouseDir;
+      oldMouseDir = !oldMouseDir ? 0 : oldMouseDir;
+
+      let walldata = getWallData(mazeState, ponyPos);
+      let walls = buildWallsAtPos(data, walldata);
       let dirs = compassDirections;
+      let fromOldDir = invertOldDirection(dirs, oldMouseDir);
+      let newdir = getNewDirections(walls, dirs, mouseDir, fromOldDir);
 
-      if(!mouseDir){
-        mouseDir = 0;
-      }
-
-      mouseDir = makeDirection(walls, dirs, mouseDir);
+      mouseDir = makeDirection(walls, dirs, mouseDir, newdir);
       postMazeMove(mazeId, dirs[mouseDir]);
     }
   }).fail(ajaxFail);
@@ -126,35 +127,47 @@ function postMazeMove(id, dir){
 // == Non-AJAX Functions == //
 //////////////////////////////
 
+function getCellIndex(mazestate, pos){
+  // returns an object containing the IDs of cells relative to current position
+  let cellIndices = {
+    north : pos-15,
+    south : pos+15,
+    west  : pos-1,
+    east  : pos+1
+  }
+  return cellIndices;
+}
 
-function buildWallsAtPony(mazestate){
+function getWallData(mazestate, pos){
   // each position can have walls at "west" and "north"
   // find walls by looking at nth index in maze data array
-  // returns array with walls relative to pony position
-
-  let wallsPony = mazestate.data[ponyPos];
-  let wallsRight = mazestate.data[ponyPos+1];
-  let wallsBelow = ponyPos+mazeWidth < (mazeWidth*mazeHeight) ? mazestate.data[ponyPos+mazeWidth] : ["north"];
-
-  let walls = new Array();
+  let wallsPony = mazestate.data[pos];
+  let wallsRight = mazestate.data[pos+1];
+  let wallsBelow = pos+mazeWidth < (mazeWidth*mazeHeight) ? mazestate.data[pos+mazeWidth] : ["north"];
 
   let wallsData = {
     pony: wallsPony,
     right: wallsRight,
-    below: wallsBelow
+    below: wallsBelow,
   };
 
-  console.log(wallsData);
+  return wallsData;
+}
 
-  for(wall in wallsData){
-    for(var dir = 0; dir < wallsData[wall].length; dir++){
+function buildWallsAtPos(mazestate, walldata){
+  // returns array with walls relative to pony position
+
+  let walls = new Array();
+
+  for(wall in walldata){
+    for(var dir = 0; dir < walldata[wall].length; dir++){
       if(wall === "pony"){
-        walls.push(wallsData[wall][dir]);
+        walls.push(walldata[wall][dir]);
       }
-      if(wall === "below" && wallsData[wall][dir] == "north"){
+      if(wall === "below" && walldata[wall][dir] == "north"){
         walls.push("south");
       }
-      if(wall === "right" && wallsData[wall][dir] == "west"){
+      if(wall === "right" && walldata[wall][dir] == "west"){
         walls.push("east");
       }
     }
@@ -164,52 +177,39 @@ function buildWallsAtPony(mazestate){
 
 function invertOldDirection(dirs, olddir){
   // simple dictionary for unpermitted directions
-  // e.g. if last move was 'north', don't go down the same path
+  // e.g. if last move was 'north', don't go 'south'
   let dirDict = {
     north: "south",
     east: "west",
     south: "north",
     west: "east"
   }
-  console.log("== INVERTED OLD DIR ==");
-  console.log(dirDict[dirs[olddir]]);
-  return dirDict[dirs[olddir]];
+  return dirs.indexOf(dirDict[dirs[olddir]]);
 }
 
-function getNewDirection(walls, dirs){
+function getNewDirections(walls, dirs, olddir, fromOldDir){
+  // new direction is based on which directions are NOT walls
   let newdirs = dirs.filter(function(x){
+    // returns valid, non-walled directions
     return walls.indexOf(x) < 0;
   });
 
-  let invertedDir = invertOldDirection(dirs, oldMouseDir);
-
   if(walls.length < 3){
     // only disallow previous direction if not at dead-end
-    let index = newdirs.indexOf(invertedDir);
+    let index = newdirs.indexOf(dirs[fromOldDir]);
     if(index > -1){
       newdirs.splice(index, 1);
     }
   }
 
-  console.log("== new dir after removing oldmousedir");
-  console.log(newdirs);
-  console.log("================================");
   return newdirs;
 }
 
-function makeDirection(walls, dirs, mousedir){
-
+function makeDirection(walls, dirs, mousedir, newdir){
+  // makes a choice of direction based on walls and last direction
   if(walls.includes(dirs[mousedir]) || walls.length === 1){
     // changes direction when touching a wall, or at junctions
-    // new direction is based on which directions are NOT walls
-    let newdir = getNewDirection(walls, dirs);
     mousedir = dirs.indexOf(newdir[getRandomInt(newdir.length)]);
-    console.log("old dir: "+dirs[oldMouseDir]);
-    console.log("new dir: "+dirs[mousedir]);
-  }
-
-  if(walls.length === 1){
-    // pick a random direction at junctions (only 1 wall)
   }
 
   oldMouseDir = mousedir;
@@ -253,6 +253,7 @@ function mazeCellVisited(mazeVisits, ponyPos){
 }
 
 function getRandomInt(max){
+  // non-inclusive max
   return Math.floor(Math.random() * Math.floor(max));
 }
 
