@@ -1,260 +1,292 @@
+$bg_color		: #ffbd39;
+$prim_color	: #3a0088;
+$sec_color	: #930077;
+$text_color	: #e61c5d;
+
+::selection{background: transparent;}
+::-moz-selection{background:transparent;}
+
 *{
- margin:0;
- padding:0;
- box-sizing: border-box;
+	margin:0;
+	padding:0;
+	box-sizing: border-box;
 }
 html,body{
- height:100%;
+	height:100%;
 
- font-family:sans-serif;
- cursor: default;
+	font-family:sans-serif;
+	cursor: default;
 
- background: linear-gradient(#fef, #ede);
+	// background: linear-gradient($prim_color, $sec_color);
+	background: $bg_color;
+
+	font-size: 1em;
 }
+
 .flex-center{
- justify-content: center;
- align-items: center;
+	justify-content: center;
+	align-items: center;
 }
 
 .wrapper{
- display:flex;
+	display:flex;
 
-  @media(min-width:1526px){
-  	width:1525px;
-  	margin: auto;
-  }
-  @media(max-width:1525px){
-  	width: 100%;
-  }
+	@media(min-width:1526px){
+		width:1525px;
+		margin: auto;
+	}
+	@media(max-width:1525px){
+		width: 100%;
+	}
 
- height:100%;
+	height:100%;
+
+	&::after{
+		content: "";
+		position:absolute;
+		z-index: 0;
+		width:100%;
+		height:100%;
+		background: url(http://www.mylifeasafoodie.com/wp-content/uploads/2017/08/guy.png);
+
+		background-repeat: no-repeat;
+		background-size: contain;
+		background-position: left;
+		opacity: .065;
+	}
 }
 
 .field{
- display:inline-block;
- position:relative;
- @media(min-width:821px){
-		width:820px;
+	display:inline-block;
+	position:relative;
+	z-index:1;
+	@media(min-width:841px){
+		width:840px;
 	}
-	@media(max-width:820px){
+	@media(max-width:840px){
 		width: 100%;
 	}
- &::before{
-   content:"";
-   display:block;
-   padding-top: 100%;
-   opacity:1;
- }
+	&::before{
+		content:"";
+		display:block;
+		padding-top: 100%;
+		opacity:1;
+	}
 }
 
 .board{
- display: flex;
- flex-direction:column;
+	display: flex;
+	flex-direction:column;
 
- position:absolute;
+	position:absolute;
 
- top:0;
- left:0;
- right:0;
- bottom:0;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
 
-  box-sizing: content-box;
-	border: 5px solid #b09995;
+	box-sizing: content-box;
 	border-radius: 15px;
 	overflow:hidden;
+
+	border: 2px solid darken($bg_color, 15%);
+
+	box-shadow:  5px 5px  darken($bg_color, 15%),
+							10px 10px darken($bg_color, 15%),
+							15px 15px darken($bg_color, 15%);
 }
 
 .playfield{
- display: flex;
+	display: flex;
 
- width:100%;
- height:100%;
-
- background: #ff0;
+	width:100%;
+	height:100%;
 }
 
 .maze{
-  display: inline-block;
-	overflow: scroll;
+	display: flex;
 
-  min-width:75%;
-	max-width: 100%;
- background: #69e851;
- position: absolute;
- top:0;
- left:0;
- white-space: pre-wrap;
- font-family: monospace;
- @media(max-width:686px){
+	height: 75%;
+	width:100%;
+
+	position: absolute;
+	top:0;
+	left:0;
+
+	overflow: hidden;
+
+	background: $bg_color;
+	color: $text_color;
+
+	white-space: pre-wrap;
+	font-family: monospace;
+	font-weight: bold;
+
+	border-bottom: 2px solid darken($bg_color, 15%);
+
+	@media(min-width:687px){
+		font-size:0.8em;
+	}
+	@media(max-width:686px){
 		font-size: 1.8vw;
 	}
- &::selection{
-   background: transparent;
- }
- &::-moz-selection{
-   background: transparent;
- }
 }
 
 .msg_box{
-	background: #ac8091;
-	width: 73%;
-	height: 23%;
- 	overflow-y: scroll;
- 	position: absolute;
+	width: 75%;
+	height: 25%;
+
+	position: absolute;
 	bottom: 0;
 	left: 0;
- 	border: 5px solid #10308b;
- 	margin: 1%;
+
+	overflow-y: scroll;
+
+	background: $bg_color;
+	color: $text_color;
+}
+
+#messages li{
+	padding: 5px;
+	&:nth-child(even){
+		background: $text_color;
+		color: $bg_color;
+	}
 }
 
 .controlpanel{
- display: flex;
- flex-direction: column;
+	display: flex;
+	flex-direction: column;
 
- width: 25%;
- height: 25%;
- position: absolute;
- bottom: 0;
- right:0;
+	width: 25%;
+	height: 25%;
+	position: absolute;
+	bottom: 0;
+	right:0;
 
- background: #aab402;
+	background: $bg_color;
 }
 
 .controlrow{
- display:flex;
- width:100%;
- background: #0ff;
-}
-.controls{
- margin: auto;
- display: flex;
- padding: 5px;
- margin: 5px;
- width: 35%;
- height: 50%;
- position:relative;
- top:0;
- border-radius: 10px;
- background: #de5893;
- box-shadow: 0 10px #bc3671;
- &:active{
-   box-shadow: 0 0px #bc3671;
-   top: 10px;
- }
-}
-
-.circle{
+	display:flex;
 	width:100%;
-	height:100%;
-	border-radius:50%;
- 	background: black;
+	height:33%;
+	margin: 5px 0;
+
+	position: relative;
+	top: 5px;
 }
 
-.arrow{
- width:0;
- height:0;
-}
-.right{
- border-top: 30px solid transparent;
- border-bottom: 30px solid transparent;
- border-right: 0 solid transparent;
- border-left: 35px solid black;
- &:active{
-   border-left: 35px solid red;
- }
-}
-.left{
- border-top: 30px solid transparent;
- border-bottom: 30px solid transparent;
- border-right: 35px solid black;
- border-left: 0px solid transparent;
- &:active{
-   border-right: 35px solid red;
- }
-}
-.up{
- border-top: 0px solid transparent;
- border-bottom: 35px solid black;
- border-right: 30px solid transparent;
- border-left: 30px solid transparent;
- &:active{
-   border-bottom: 35px solid red;
- }
-}
-.down{
- border-top: 35px solid black;
- border-bottom: 0px solid transparent;
- border-right: 30px solid transparent;
- border-left: 30px solid transparent;
- &:active{
-   border-top: 35px solid red;
- }
+.controls{
+	display: flex;
+	flex-grow:1;
+
+	margin: 5px;
+
+	width: 35%;
+	height: 100%;
+
+	color: $bg_color;
+
+	position:relative;
+	bottom:10px;
+
+	font-weight: bold;
+
+	border-radius: 10px;
+	background: $text_color;
+	box-shadow: 0 10px darken($text_color, 15%);
+	&:active{
+		box-shadow: 0 0px darken($text_color, 15%);
+		bottom: 0px;
+	}
 }
 
+.no-show{
+	visibility: hidden;
+}
 
 .gamesetup{
- display:flex;
- flex-direction: column;
- position:relative;
- z-index: 1;
+	display:flex;
+	flex-direction: column;
+	position:relative;
+	z-index: 1;
 
- height:100%;
- width: 100%;
- background: #75956a;
- // opacity: 0;
+	height:100%;
+	width: 100%;
+	background: $bg_color;
+
+	// opacity: 0;
 }
+
 .setupfieldcontainer{
- display:flex;
- flex-direction: column;
- justify-content: center;
- align-items: center;
- width:60%;
+	display:flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width:60%;
 
- text-align: center;
+	text-align: center;
 
- background:#3c3a54;
- color: #fff;
- height: 55px;
+	background: $text_color;
+	color: $bg_color;
+	height: 55px;
 
- margin: 1px 0;
- border-radius: 10px;
+	font-weight: bold;
+	text-transform: uppercase;
+
+	margin: 1% 0;
+	border-radius: 10px 10px 11px 11px;
+	// border-radius: 10px;
+
+	box-shadow: 0 10px darken($bg_color, 15%);
 }
 
 .setupfield{
- width: 100%;
- height:100%;
+	width: 100%;
+	height:100%;
 
- /* flex-grow: 1; */
- -moz-appearance: textfield;
- border-style: none;
- border-radius:0 0 10px 10px;
+	/* flex-grow: 1; */
+	-moz-appearance: textfield;
+	border-style: none;
+	border-radius:0 0 10px 10px;
 
- text-align:center;
- font-size: 1.448em;
- cursor:text;
- color:#aa1abd;
- background: #503be4;
+	text-align:center;
+	font-size: 1.448em;
+
+	font-weight: bold;
+
+	cursor:text;
+
+	color:$text_color;
+	background: $bg_color;
+
+	border-left: 2px solid darken($bg_color, 15%);
+	border-right: 2px solid darken($bg_color, 15%);
 }
 
 .start{
- display:flex;
+	display:flex;
 
- position: relative;
- top: 0;
+	position: relative;
+	top: 0;
 
- height: 10%;
- width: 60%;
- background: #0f0;
- margin: 1% 0;
- border-radius: 5px;
+	height: 10%;
+	width: 60%;
+	margin: 1% 0;
 
- box-shadow: 0 10px #0a0;
+	color: $bg_color;
+	font-size: 4em;
+	font-weight:bold;
 
- &:active{
-   box-shadow: 0 0 #0a0;
-   top: 10px;
- }
+	background: $text_color;
+	border-radius: 5px;
+	box-shadow: 0 10px darken($text_color, 15%);
 
- transition: 16ms ease-in;
+	&:active{
+		box-shadow: 0 0 darken($text_color, 15%);
+		top: 10px;
+	}
+
+	transition: 16ms ease-in;
 }

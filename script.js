@@ -113,10 +113,12 @@ $(document).on('click', '.start', function(){
   }
   getMazeId(mazeParams);
 });
- $(document).on('click', '.controls', function(){
+$(document).on('mousedown', '.controls', function(){
   // posts chosen direction
   let direction = $(this).attr('data-dir');
-  printMsg("You attempt to move "+direction+".");
+  if(direction !== "stay"){
+    printMsg("You attempt to move "+direction+".");
+  }
   postMazeMove(mazeId, direction);
 });
 
