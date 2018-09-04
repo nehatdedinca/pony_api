@@ -29,10 +29,14 @@ var mazeParams = {};
 var mazeVisits = {};
 // random mouse algo
 var mouseDir;
+var oldMouseDir;
+// possible directions to take
+var compassDirections = ["north", "east", "south", "west"];
 // pony position, from array
 var ponyPos;
 // "ai" controlled pony
 var AUTO = true;
+
 
 //////////////////////////////
 //        FUNCTIONS         //
@@ -81,7 +85,7 @@ function getMazeState(id){
 
     if(AUTO && gameState == "active"){
       let walls = buildWallsAtPony(data);
-      let dirs = getValidDirections(walls);
+      let dirs = compassDirections;
 
       if(!mouseDir){
         mouseDir = 0;
@@ -117,31 +121,11 @@ function postMazeMove(id, dir){
   }).fail(ajaxFail);
 }
 
+
+//////////////////////////////
 // == Non-AJAX Functions == //
+//////////////////////////////
 
-function printMsg(msg){
-  $('#messages').append($('<li>').text(msg));
-  scrollBottom();
-}
-
-function printMazeState(mazeViz){
-  $('.maze').empty().append(mazeViz);
-}
-
-function ajaxFail(err){
-  console.log("== ERROR ==");
-  console.log(err);
-
-  if(err.responseText == "Only ponies can play"){
-    $("#maze-player-name").val('').attr('placeholder', err.responseText);
-  }
-}
-
-function scrollBottom(){
-  let scrollbox = $('.msg_box');
-  let e = $('#messages');
-  scrollbox.scrollTop(e.height());
-}
 
 function buildWallsAtPony(mazestate){
   // each position can have walls at "west" and "north"
@@ -160,6 +144,8 @@ function buildWallsAtPony(mazestate){
     below: wallsBelow
   };
 
+  console.log(wallsData);
+
   for(wall in wallsData){
     for(var dir = 0; dir < wallsData[wall].length; dir++){
       if(wall === "pony"){
@@ -176,25 +162,57 @@ function buildWallsAtPony(mazestate){
   return walls;
 }
 
-function getValidDirections(walls){
-  let dirs = ["north", "west", "east", "south"];
+function invertOldDirection(dirs, olddir){
+  // simple dictionary for unpermitted directions
+  // e.g. if last move was 'north', don't go down the same path
+  let dirDict = {
+    north: "south",
+    east: "west",
+    south: "north",
+    west: "east"
+  }
+  console.log("== INVERTED OLD DIR ==");
+  console.log(dirDict[dirs[olddir]]);
+  return dirDict[dirs[olddir]];
+}
 
-  // for(var wall = 0; wall < walls.length; wall++){
-  //   let index = dirs.indexOf(walls[wall]);
-  //   dirs.splice(index, 1);
-  // }
-  return dirs;
+function getNewDirection(walls, dirs){
+  let newdirs = dirs.filter(function(x){
+    return walls.indexOf(x) < 0;
+  });
+
+  let invertedDir = invertOldDirection(dirs, oldMouseDir);
+
+  if(walls.length < 3){
+    // only disallow previous direction if not at dead-end
+    let index = newdirs.indexOf(invertedDir);
+    if(index > -1){
+      newdirs.splice(index, 1);
+    }
+  }
+
+  console.log("== new dir after removing oldmousedir");
+  console.log(newdirs);
+  console.log("================================");
+  return newdirs;
 }
 
 function makeDirection(walls, dirs, mousedir){
 
-  if(walls.includes(dirs[mousedir])){
-    let newdir = dirs.filter(function(x){
-      return walls.indexOf(x) < 0;
-    });
+  if(walls.includes(dirs[mousedir]) || walls.length === 1){
+    // changes direction when touching a wall, or at junctions
+    // new direction is based on which directions are NOT walls
+    let newdir = getNewDirection(walls, dirs);
     mousedir = dirs.indexOf(newdir[getRandomInt(newdir.length)]);
+    console.log("old dir: "+dirs[oldMouseDir]);
+    console.log("new dir: "+dirs[mousedir]);
   }
 
+  if(walls.length === 1){
+    // pick a random direction at junctions (only 1 wall)
+  }
+
+  oldMouseDir = mousedir;
   return mousedir;
 }
 
@@ -238,11 +256,33 @@ function getRandomInt(max){
   return Math.floor(Math.random() * Math.floor(max));
 }
 
+function printMsg(msg){
+  $('#messages').append($('<li>').text(msg));
+  scrollBottom();
+}
+
+function printMazeState(mazeViz){
+  $('.maze').empty().append(mazeViz);
+}
+
+function ajaxFail(err){
+  console.log("== ERROR ==");
+  console.log(err);
+
+  if(err.responseText == "Only ponies can play"){
+    $("#maze-player-name").val('').attr('placeholder', err.responseText);
+  }
+}
+
+function scrollBottom(){
+  let scrollbox = $('.msg_box');
+  let e = $('#messages');
+  scrollbox.scrollTop(e.height());
+}
+
 ///////////////////////////////////
 //         EVENT HANDLING        //
 ///////////////////////////////////
-
-
 
 $(document).on('mousedown', '.start', function(){
   // collect game setup and get maze_id from api when user starts
